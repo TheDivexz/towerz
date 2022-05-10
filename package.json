@@ -1,0 +1,30 @@
+{
+  "name": "towerz",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "node src/deploy-commands.js && node src/index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/TheDivexz/towerz.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/TheDivexz/towerz/issues"
+  },
+  "homepage": "https://github.com/TheDivexz/towerz#readme",
+  "dependencies": {
+    "@discordjs/builders": "^0.13.0",
+    "@discordjs/rest": "^0.4.1",
+    "discord-api-types": "^0.32.1",
+    "discord.js": "^13.6.0",
+    "dotenv": "^16.0.0"
+  },
+  "devDependencies": {
+    "eslint": "^8.15.0"
+  }
+}
