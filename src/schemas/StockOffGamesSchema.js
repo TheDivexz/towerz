@@ -13,7 +13,7 @@ const StockOffGamesSchema = new mongoose.Schema({
 	// What day does the game end?
 	endDate: mongoose.SchemaTypes.Date,
 	// How much does everyone start with?
-	startingCash: mongoose.SchemaTypes.Number,
+	startingCash: mongoose.SchemaTypes.Decimal128,
 	// Is the Game still going?
 	isOngoing: mongoose.SchemaTypes.Boolean,
 	// Who is playing?
@@ -21,13 +21,13 @@ const StockOffGamesSchema = new mongoose.Schema({
 		// Player ID
 		playerid: { type: String },
 		// How Much Money do they Have?
-		currentValue: { type: Number },
+		currentValue: { type: mongoose.SchemaTypes.Decimal128 },
 		// What's their portfolio looking like?
 		stocks: [{
 			// The Name of the stock
 			code: { type: String },
 			// How Much was the stock worth when they bought it
-			stockvalue: { type: Number },
+			stockvalue: { type: mongoose.SchemaTypes.Decimal128 },
 			// number of stocks held
 			amountheld: { type: Number },
 		}],
