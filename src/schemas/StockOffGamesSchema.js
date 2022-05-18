@@ -26,8 +26,6 @@ const StockOffGamesSchema = new mongoose.Schema({
 		stocks: [{
 			// The Name of the stock
 			code: { type: String },
-			// How Much was the stock worth when they bought it
-			stockvalue: { type: mongoose.SchemaTypes.Decimal128 },
 			// number of stocks held
 			amountheld: { type: Number },
 		}],

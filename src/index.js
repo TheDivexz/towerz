@@ -4,12 +4,9 @@ const { Collection } = require('discord.js');
 const { Client, Intents } = require('discord.js');
 const { botToken } = require('../config.json');
 const path = require('node:path');
-const discordModals = require('discord-modals');
 
 // The bot permissions
 const client = new Client({ intents: [Intents.FLAGS.GUILDS] });
-
-discordModals(client);
 
 client.commands = new Collection();
 const commandFiles = fs.readdirSync(path.resolve(__dirname, './commands')).filter(file => file.endsWith('.js'));
@@ -40,7 +37,7 @@ client.on('interactionCreate', async interaction => {
 	if (!command) return;
 
 	try {
-		await command.execute(interaction, client);
+		await command.execute(interaction);
 	}
 	catch (error) {
 		console.error(error);
