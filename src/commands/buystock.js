@@ -50,11 +50,13 @@ module.exports = {
 					return console.log(err);
 				}
 				for (const iterator of docs) {
-					list_of_games.push({
-						label: iterator['gameName'],
-						description: `buy/sell for ${iterator['gameName']}`,
-						value: `${iterator['_id']}`,
-					});
+					if (iterator['isOngoing']) {
+						list_of_games.push({
+							label: iterator['gameName'],
+							description: `buy/sell for ${iterator['gameName']}`,
+							value: `${iterator['_id']}`,
+						});
+					}
 				}
 				const gamesrow = new MessageActionRow()
 					.addComponents(
