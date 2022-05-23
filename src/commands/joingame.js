@@ -4,24 +4,22 @@ const StockOffGames = require('../schemas/StockOffGamesSchema');
 
 module.exports = {
 	data: new SlashCommandBuilder()
-		.setName('checkportfolio')
-		.setDescription('Check your current investment portfolio'),
+		.setName('joingame')
+		.setDescription('join an existing game'),
 
 	async execute(interaction) {
 
-		StockOffGames.find({ 'players.playerid': interaction.user.id }, function(err, docs) {
+		StockOffGames.find({ 'isOngoing': true }, function(err, docs) {
 			const list_of_games = [];
 			if (err) {
 				return console.log(err);
 			}
 			for (const iterator of docs) {
-				if (iterator['isOngoing']) {
-					list_of_games.push({
-						label: iterator['gameName'],
-						description: `check portfolio for ${iterator['gameName']}`,
-						value: `${iterator['_id']}`,
-					});
-				}
+				list_of_games.push({
+					label: iterator['gameName'],
+					description: `check portfolio for ${iterator['gameName']}`,
+					value: `${iterator['_id']}`,
+				});
 			}
 			const gamesrow = new MessageActionRow()
 				.addComponents(
@@ -32,7 +30,7 @@ module.exports = {
 				);
 
 			interaction.reply({
-				content: 'Which game would you like to check your portfolio?',
+				content: 'Which game would you like to join?',
 				components: [gamesrow],
 				ephemeral: true,
 			});
@@ -51,22 +49,33 @@ module.exports = {
 
 			collector.on('collect', async (MenuInteraction) => {
 				const value = MenuInteraction.values[0];
-				let portfolio = `${interaction.user.tag}'s portfolio`;
 				StockOffGames.findById(value, function(err, docs2) {
 					for (let i = 0; i < docs2.players.length; i++) {
-						if (docs2.players[i]['playerid'] === interactor) {
-							portfolio += '\n';
-							portfolio += `cash\t$${docs2.players[i]['currentValue']}`;
-							for (let j = 0; j < docs2.players[i]['stocks'].length; j++) {
-								portfolio += '\n';
-								portfolio += docs2.players[i]['stocks'][j]['code'];
-								portfolio += '\t';
-								portfolio += docs2.players[i]['stocks'][j]['amountheld'];
-							}
-							break;
+						if (docs2.players[i]['isStillPlaying'] === true && docs2.players[i]['playerid'] === interactor) {
+							return MenuInteraction.reply({
+								content: 'You are already part of the game',
+								ephemeral: true,
+							});
+						}
+						else if (docs2.players[i]['isStillPlaying'] === false && docs2.players[i]['playerid'] === interactor) {
+							docs2.players[i]['isStillPlaying'] = true;
+							docs2.save();
+							return MenuInteraction.reply({
+								content: 'game joined!',
+								ephemeral: true,
+							});
 						}
 					}
-					return MenuInteraction.reply({ content: portfolio });
+					docs2.players.push({
+						playerid: interactor,
+						currentValue: docs2['startingCash'],
+						isStillPlaying: true,
+					});
+					docs2.save();
+					return MenuInteraction.reply({
+						content: 'game joined!',
+						ephemeral: true,
+					});
 				});
 			});
 		});

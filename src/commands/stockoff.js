@@ -119,6 +119,7 @@ module.exports = {
 				}
 				newGame.players.push({
 					playerid: interactor,
+					currentValue: interaction.options.getInteger('dollars'),
 					isStillPlaying: true,
 				});
 				// Lets them know they've joined the game
